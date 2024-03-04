@@ -2,6 +2,8 @@ import express from 'express'
 import { errorHandler } from './middlewares/errorHandler'
 import router from './routes'
 import cors from 'cors'
+import { DB_URL, HOST_NAME, PORT } from './config'
+import { connectDb } from './utils/connectDB'
 
 const app = express()
 
@@ -28,6 +30,7 @@ app.use('*', (req, res ) => {
 app.use(errorHandler)
 
 /** ---> listening server and making connection to database. */
-app.listen(3000, ()=> {
-    console.log(`server is runnig at http://127.0.0.1:3000`)
+app.listen(Number(PORT), HOST_NAME, ()=> {
+    console.log(`server is runnig at http://${HOST_NAME}:${PORT}`)
+    connectDb(DB_URL)
 })
