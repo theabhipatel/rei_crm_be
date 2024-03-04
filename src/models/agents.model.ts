@@ -7,16 +7,13 @@ interface IBaseAgent {
   company: string;
 }
 
-
-
 interface IAgentSchema extends IBaseAgent, Document {}
 
 const agentSchema = new Schema<IAgentSchema>({
   fullName: { type: String, required: true },
   email: { type: String, unique: true, required: true },
   password: { type: String, required: true },
-  company: { type: String, required: true, ref:'admin' },
-  
+  company: { type: String, required: true, ref: "admin" },
 });
 
 const agentModel = model<IAgentSchema>("agent", agentSchema);
