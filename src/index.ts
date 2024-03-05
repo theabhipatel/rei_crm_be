@@ -6,10 +6,12 @@ import { DB_URL, HOST_NAME, PORT } from "./config";
 import { connectDb } from "./utils/connectDB";
 import { deserializeUser } from "./middlewares/deserializeUser";
 import cookieParser from "cookie-parser";
+import helmet from "helmet";
 
 const app = express();
 
 /** ---> registering middlewares */
+app.use(helmet());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
