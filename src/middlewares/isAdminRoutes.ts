@@ -3,7 +3,7 @@ import adminModel from "../models/admin.model";
 
 export const isAdminRoutes: RequestHandler = async (req, res, next) => {
   try {
-    const userId = res.locals.id;
+    const userId = res.locals.userId;
     if (!userId) return res.status(401).json({ success: false, message: "Please signin first." });
     const admin = await adminModel.findById(userId);
     if (!admin)

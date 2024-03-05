@@ -3,7 +3,7 @@ import agentModel from "../models/agent.model";
 
 export const isAgentRoutes: RequestHandler = async (req, res, next) => {
   try {
-    const userId = res.locals.id;
+    const userId = res.locals.userId;
     if (!userId) return res.status(401).json({ success: false, message: "Please signin first." });
     const agent = await agentModel.findById(userId);
     if (!agent)

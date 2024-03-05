@@ -5,6 +5,6 @@ import dashboardRouter from "./dashboard.routes";
 const router = Router();
 
 router.use("/auth", authRouter);
-router.use(dashboardRouter);
+router.use("/dashboard", dashboardRouter);
 
 export default router;

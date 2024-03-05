@@ -1,12 +1,12 @@
 import { Router } from "express";
-import { getAdminRoutes } from "../controllers/admin.controller";
-import { getAgentRoutes } from "../controllers/agent.controller";
+import { addAgent, getMe } from "../controllers/dashboard.controller";
 import { isAdminRoutes } from "../middlewares/isAdminRoutes";
 import { isAgentRoutes } from "../middlewares/isAgentRoutes";
+import { authorize } from "../middlewares/authorize";
 
 const dashboardRouter = Router();
 
-dashboardRouter.get("/admin/get-access", isAdminRoutes, getAdminRoutes);
-dashboardRouter.get("/agent/get-access", isAgentRoutes, getAgentRoutes);
+dashboardRouter.get("/get-me", authorize(["SUPER_ADMIN", "ADMIN", "AGENT"]), getMe);
+dashboardRouter.post("/add-agent", authorize(["ADMIN"]), addAgent);
 
 export default dashboardRouter;
