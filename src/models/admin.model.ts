@@ -6,7 +6,7 @@ interface IBaseAdmin {
   password: string;
   companyName: string;
   isVerified: boolean;
-  isBlock: boolean;
+  isBlocked: boolean;
   role: "ADMIN";
 }
 
@@ -18,7 +18,7 @@ const adminSchema = new Schema<IAdminSchema>({
   password: { type: String, required: true },
   companyName: { type: String, required: true },
   isVerified: { type: Boolean, default: true },
-  isBlock: { type: Boolean, default: false },
+  isBlocked: { type: Boolean, default: false },
   role: { type: String, default: "ADMIN" },
 });
 

@@ -6,7 +6,7 @@ interface IBaseAgent {
   password: string;
   company: string;
   isVerified: boolean;
-  isBlock: boolean;
+  isBlocked: boolean;
   role: "AGENT";
 }
 
@@ -18,7 +18,7 @@ const agentSchema = new Schema<IAgentSchema>({
   password: { type: String, required: true },
   company: { type: String, required: true, ref: "admin" },
   isVerified: { type: Boolean, default: true },
-  isBlock: { type: Boolean, default: false },
+  isBlocked: { type: Boolean, default: false },
   role: { type: String, default: "AGENT" },
 });
 
