@@ -15,18 +15,3 @@ export const authorize = (persons: string[]) => {
     }
   };
 };
-
-// export const isAgentRoutes: RequestHandler = async (req, res, next) => {
-//   try {
-//     const userId = res.locals.userId;
-//     const role = res.locals.role;
-//     if (!userId) return res.status(401).json({ success: false, message: "Please signin first." });
-
-//     if (!agent)
-//       return res.status(404).json({ success: false, message: "Your are not agent you cannot access this route." });
-
-//     next();
-//   } catch (error) {
-//     next(error);
-//   }
-// };

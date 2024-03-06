@@ -23,12 +23,6 @@ app.get("/", (req, res) => {
   res.status(200).json({ success: true, message: "Welcome to REI-CRM home api." });
 });
 
-/** ---> TESTING  */
-app.use((req, res, next) => {
-  res.locals.id = req.body.id;
-  next();
-});
-
 /** ---> handling all routes. */
 app.use("/api/v1", router);
 
