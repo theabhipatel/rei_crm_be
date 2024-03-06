@@ -4,7 +4,10 @@ import bcrypt from "bcryptjs";
 
 export const getMe: RequestHandler = async (req, res, next) => {
   try {
-    res.status(200).json({ success: true, message: "I can access admin routes." });
+    const userId = res.locals.userId;
+    const user = await userModel.findById(userId);
+    if (!user) return res.status(404).json({ success: false, message: "User not found." });
+    res.status(200).json({ success: true, message: "User fetched.", user });
   } catch (error) {
     next(error);
   }
