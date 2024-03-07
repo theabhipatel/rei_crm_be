@@ -9,12 +9,15 @@ import cookieParser from "cookie-parser";
 import helmet from "helmet";
 import { rateLimit } from "express-rate-limit";
 import mongoSanitize from "express-mongo-sanitize";
+import swaggerUi from "swagger-ui-express";
+import YMAL from "yaml";
+import fs from "fs";
 
 const app = express();
 
 const limiter = rateLimit({
   windowMs: 10 * 60 * 1000,
-  limit: 10,
+  limit: 100,
 });
 
 /** ---> registering middlewares */
@@ -28,12 +31,16 @@ app.use(cookieParser());
 app.use(deserializeUser);
 
 /** ---> handling home route. */
-app.get("/", (req, res) => {
-  res.status(200).json({ success: true, message: "Welcome to REI-CRM home api." });
+app.get("/api/v1", (req, res) => {
+  res.status(200).json({ success: true, message: "Welcome to REI-CRM home api v1." });
 });
 
 /** ---> handling all routes. */
 app.use("/api/v1", router);
+
+/** ---> documenting api's. */
+const apiDocs = YMAL.parse(fs.readFileSync(__dirname + "/apiDocsV1.yaml", "utf-8"));
+app.use("/api/v1/docs", swaggerUi.serve, swaggerUi.setup(apiDocs));
 
 /** ---> handling not found page. */
 app.use("*", (req, res) => {
