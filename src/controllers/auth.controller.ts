@@ -31,7 +31,7 @@ export const loginUser: RequestHandler = async (req, res, next) => {
 
     const token = jwt.sign({ userId: user._id }, JWT_SECRET);
 
-    res.cookie("accessToken", token, { maxAge: 1000 * 60 * 10 });
+    res.cookie("accessToken", token, { maxAge: 1000 * 60 * 100 });
     res.status(200).json({ success: true, message: "User logged in successfully.", user });
   } catch (error) {
     next(error);
