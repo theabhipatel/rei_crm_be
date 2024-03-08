@@ -9,7 +9,7 @@ export const deserializeUser: RequestHandler = async (req, res, next) => {
     if (cookie.accessToken) {
       const userInfo = jwt.verify(cookie.accessToken, JWT_SECRET) as { userId: string };
       const user = await userModel.findById(userInfo.userId);
-      if (user) {
+      if (user && !user.isBlocked) {
         res.locals.userId = userInfo.userId;
         res.locals.role = user.role;
       }
