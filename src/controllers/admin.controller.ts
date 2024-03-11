@@ -19,7 +19,8 @@ export const addAgent: RequestHandler = async (req, res, next) => {
     const { fullname, email, password } = req.body;
     const agent = await userModel.findOne({ email });
     if (agent) return res.status(403).json({ success: false, message: "Agent already registered." });
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
     await userModel.create({ fullname, email, password: hashedPassword, associate_admin: adminId, role: ERoles.AGENT });
 
     res.status(201).json({ success: true, message: "Agent registered successfully." });
@@ -45,14 +46,20 @@ export const updateAgent: RequestHandler = async (req, res, next) => {
     const adminId = res.locals.userId;
     const agentId = req.params.id;
 
-    console.log("------------- req.body --->", req.body);
-
     const agent = await userModel.findById(agentId);
     if (!agent) return res.status(404).json({ success: false, message: "Agent not found." });
     if (agent.associate_admin !== adminId)
       return res.status(403).json({ success: false, message: "Agent cannot be updated." });
 
-    await userModel.findByIdAndUpdate(agentId, { ...req.body });
+    const { password } = req.body;
+    if (password) {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+      await userModel.findByIdAndUpdate(agentId, { password: hashedPassword, ...req.body });
+    } else {
+      await userModel.findByIdAndUpdate(agentId, { ...req.body });
+    }
+
     res.status(200).json({ success: true, message: "Agent updated successfully." });
   } catch (error) {
     next(error);
