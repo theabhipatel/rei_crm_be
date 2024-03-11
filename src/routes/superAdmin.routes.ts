@@ -1,8 +1,11 @@
 import { Router } from "express";
-import { getMyProfile } from "../controllers/superAdmin.controller";
+import { addAdmin, getAllAdmins, getMyProfile, updateAdmin } from "../controllers/superAdmin.controller";
 
 const superAdminRouter = Router();
 
 superAdminRouter.get("/", getMyProfile);
+superAdminRouter.get("/get-admins", getAllAdmins);
+superAdminRouter.post("/add-admin", addAdmin);
+superAdminRouter.patch("/update-admin/:id", updateAdmin);
 
 export default superAdminRouter;
