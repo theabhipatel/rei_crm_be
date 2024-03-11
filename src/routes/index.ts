@@ -8,6 +8,6 @@ const router = Router();
 
 router.use("/auth", authRouter);
 router.use("/super-admin/dashboard", authorize(["SUPER_ADMIN"]), superAdminRouter);
-router.use("admin/dashboard", authorize(["ADMIN", "AGENT"]), adminRouter);
+router.use("/admin/dashboard", authorize(["ADMIN", "AGENT"]), adminRouter);
 
 export default router;
