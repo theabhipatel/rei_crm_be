@@ -56,3 +56,29 @@ export const updateAdmin: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getAdminsWithAgents: RequestHandler = async (req, res, next) => {
+  try {
+    const admins = await userModel.find({ role: "ADMIN" }).select("-password");
+    const agentsMap = new Map();
+    const agentDocs = await userModel.aggregate([
+      { $match: { role: "AGENT" } },
+      {
+        $group: { _id: "$associate_admin", agents: { $push: { _id: "$_id", fullname: "$fullname", email: "$email" } } },
+      },
+    ]);
+
+    agentDocs.forEach((doc) => {
+      agentsMap.set(doc._id, doc.agents);
+    });
+
+    const adminsWithAgents = admins.map((admin) => {
+      const agents = agentsMap.get(admin._id.toString()) || [];
+      return { ...admin.toObject(), agents };
+    });
+
+    res.status(200).json({ success: true, message: "Admins fetched successfully.", admins: adminsWithAgents });
+  } catch (error) {
+    next(error);
+  }
+};
