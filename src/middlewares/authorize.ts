@@ -1,6 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 
-export const authorize = (persons: string[]) => {
+type UserRoles = "SUPER_ADMIN" | "ADMIN" | "AGENT" | "BUYER";
+
+export const authorize = (persons: UserRoles[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userId = res.locals.userId;
