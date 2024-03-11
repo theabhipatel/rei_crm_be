@@ -18,7 +18,8 @@ export const addAdmin: RequestHandler = async (req, res, next) => {
     const { fullname, email, password } = req.body;
     const user = await userModel.findOne({ email });
     if (user) return res.status(403).json({ success: false, message: "User already registered." });
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(password, salt);
     await userModel.create({ fullname, email, password: hashedPassword, role: ERoles.ADMIN });
 
     res.status(201).json({ success: true, message: "Admin registered successfully." });
