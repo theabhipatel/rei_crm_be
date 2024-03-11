@@ -39,9 +39,16 @@ export const getAllAdmins: RequestHandler = async (req, res, next) => {
 export const updateAdmin: RequestHandler = async (req, res, next) => {
   try {
     const adminId = req.params.id;
-
-    const admin = await userModel.findByIdAndUpdate(adminId, { ...req.body });
-    if (!admin) return res.status(404).json({ success: false, message: "Admin not found." });
+    const { password } = req.body;
+    if (password) {
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+      const admin = await userModel.findByIdAndUpdate(adminId, { password: hashedPassword, ...req.body });
+      if (!admin) return res.status(404).json({ success: false, message: "Admin not found." });
+    } else {
+      const admin = await userModel.findByIdAndUpdate(adminId, { ...req.body });
+      if (!admin) return res.status(404).json({ success: false, message: "Admin not found." });
+    }
 
     res.status(200).json({ success: true, message: "Admin updated successfully." });
   } catch (error) {
