@@ -1,4 +1,4 @@
-import { string, object, boolean } from "zod";
+import { string, object, boolean, number, enum as enum_, array } from "zod";
 
 export const registerUserSchema = object({
   body: object({
@@ -42,5 +42,23 @@ export const updateAdminSchema = object({
     password: string().min(4, "password must be 4 char long.").optional(),
     isVerified: boolean().optional(),
     isBlocked: boolean().optional(),
+  }),
+});
+
+const EnumType = enum_(["Monthly", "Yearly"]);
+
+export const createPlanSchema = object({
+  body: object({
+    title: string({ required_error: "title is required." }),
+    type: EnumType,
+    users: number({ required_error: "users is required." }),
+    price_permonth: number({ required_error: "price is required." }),
+    description: string({ required_error: "description is required." }),
+    details: array(
+      object({
+        title: string(),
+        description: string(),
+      }),
+    ),
   }),
 });

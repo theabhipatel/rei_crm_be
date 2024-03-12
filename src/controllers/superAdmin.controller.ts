@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 import userModel, { ERoles } from "../models/user.model";
 import bcrypt from "bcryptjs";
+import planModel from "../models/plan.model";
 
 export const getMyProfile: RequestHandler = async (req, res, next) => {
   try {
@@ -78,6 +79,43 @@ export const getAdminsWithAgents: RequestHandler = async (req, res, next) => {
     });
 
     res.status(200).json({ success: true, message: "Admins fetched successfully.", admins: adminsWithAgents });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const createPlan: RequestHandler = async (req, res, next) => {
+  try {
+    const userId = res.locals.userId;
+    const plan = await planModel.create({
+      ...req.body,
+      createdby: userId,
+    });
+
+    res.status(201).json({ success: true, message: "Plan created successfully." });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getPlans: RequestHandler = async (req, res, next) => {
+  try {
+    const plans = await planModel.find();
+
+    res.status(200).json({ success: true, message: "Plan fetched successfully.", plans });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updatePlan: RequestHandler = async (req, res, next) => {
+  try {
+    const planId = req.params.id;
+    const plan = await planModel.findByIdAndUpdate(planId, {
+      ...req.body,
+    });
+
+    res.status(201).json({ success: true, message: "Plan updated successfully." });
   } catch (error) {
     next(error);
   }
