@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   addAdmin,
   createPlan,
+  deletePlan,
   getAdminsWithAgents,
   getAllAdmins,
   getMyProfile,
@@ -22,5 +23,6 @@ superAdminRouter.post("/add-admin", validateInput(addAdminSchema), addAdmin);
 superAdminRouter.post("/create-plan", validateInput(createPlanSchema), createPlan);
 superAdminRouter.patch("/update-admin/:id", validateInput(updateAdminSchema), updateAdmin);
 superAdminRouter.patch("/update-plan/:id", validateInput(updateAdminSchema), updatePlan);
+superAdminRouter.delete("/delete-plan/:id", deletePlan);
 
 export default superAdminRouter;

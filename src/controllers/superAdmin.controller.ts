@@ -114,8 +114,21 @@ export const updatePlan: RequestHandler = async (req, res, next) => {
     const plan = await planModel.findByIdAndUpdate(planId, {
       ...req.body,
     });
+    if (!plan) return res.status(404).json({ success: false, message: "Plan not found." });
 
-    res.status(201).json({ success: true, message: "Plan updated successfully." });
+    res.status(200).json({ success: true, message: "Plan updated successfully." });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deletePlan: RequestHandler = async (req, res, next) => {
+  try {
+    const planId = req.params.id;
+    const plan = await planModel.findByIdAndDelete(planId);
+    if (!plan) return res.status(404).json({ success: false, message: "Plan not found." });
+
+    res.status(200).json({ success: true, message: "Plan deleted successfully." });
   } catch (error) {
     next(error);
   }
