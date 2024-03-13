@@ -25,6 +25,6 @@ const planSchema = new Schema<IPlanSchema>(
   { timestamps: true },
 );
 
-const planModel = model<IBasePlan>("plan", planSchema);
+const planModel = model<IPlanSchema>("plan", planSchema);
 
 export default planModel;
