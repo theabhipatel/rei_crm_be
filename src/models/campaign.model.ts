@@ -11,6 +11,7 @@ interface IBaseCampaign {
   actualCost: number;
   note: string;
   createdby: string;
+  adminId: string;
 }
 
 interface ICampaignSchema extends IBaseCampaign, Document {}
@@ -27,6 +28,7 @@ const campaignSchema = new Schema<ICampaignSchema>(
     actualCost: { type: Number },
     note: { type: String, required: true },
     createdby: { type: String, required: true },
+    adminId: { type: String, required: true },
   },
   { timestamps: true },
 );
