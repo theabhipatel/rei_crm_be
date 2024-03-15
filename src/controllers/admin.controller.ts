@@ -1,6 +1,7 @@
 import { RequestHandler } from "express";
 import userModel, { ERoles } from "../models/user.model";
 import bcrypt from "bcryptjs";
+import campaignModel from "../models/campaign.model";
 
 export const getMyProfie: RequestHandler = async (req, res, next) => {
   try {
@@ -61,6 +62,43 @@ export const updateAgent: RequestHandler = async (req, res, next) => {
     }
 
     res.status(200).json({ success: true, message: "Agent updated successfully." });
+  } catch (error) {
+    next(error);
+  }
+};
+
+//###########################################################
+/** ---> Campaign related controllers */
+//###########################################################
+
+export const createCampaign: RequestHandler = async (req, res, next) => {
+  try {
+    const userId = res.locals.userId;
+    const user = await userModel.findById(userId);
+    if (user?.role === ERoles.AGENT) {
+      await campaignModel.create({ createdby: userId, adminId: user.associate_admin, ...req.body });
+    } else if (user?.role === ERoles.ADMIN) {
+      await campaignModel.create({ createdby: userId, adminId: user._id, ...req.body });
+    }
+
+    res.status(201).json({ success: true, message: "Campaign created successfully." });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getCampaigns: RequestHandler = async (req, res, next) => {
+  try {
+    const userId = res.locals.userId;
+    const user = await userModel.findById(userId);
+    let campaigns;
+    if (user?.role === ERoles.AGENT) {
+      campaigns = await campaignModel.find({ $and: [{ adminId: { $eq: user.associate_admin } }] });
+    } else if (user?.role === ERoles.ADMIN) {
+      campaigns = await campaignModel.find({ $and: [{ adminId: { $eq: user._id } }] });
+    }
+
+    res.status(200).json({ success: true, message: "Campaign fetched successfully.", campaigns });
   } catch (error) {
     next(error);
   }
