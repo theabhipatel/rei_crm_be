@@ -2,6 +2,7 @@ import { RequestHandler } from "express";
 import userModel, { ERoles } from "../models/user.model";
 import bcrypt from "bcryptjs";
 import campaignModel from "../models/campaign.model";
+import taskModel from "../models/task.model";
 
 export const getMyProfie: RequestHandler = async (req, res, next) => {
   try {
@@ -127,6 +128,62 @@ export const deleteCampaign: RequestHandler = async (req, res, next) => {
     if (!campaign) return res.status(404).json({ success: false, message: "Campaign not found" });
 
     res.status(200).json({ success: true, message: "Campaign deleted successfully." });
+  } catch (error) {
+    next(error);
+  }
+};
+
+//###########################################################
+/** ---> Task related controllers */
+//###########################################################
+
+export const createTask: RequestHandler = async (req, res, next) => {
+  try {
+    const userId = res.locals.userId;
+    await taskModel.create({ adminId: userId, ...req.body });
+
+    res.status(201).json({ success: true, message: "Task created successfully." });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getTasks: RequestHandler = async (req, res, next) => {
+  try {
+    const userId = res.locals.userId;
+    const user = await userModel.findById(userId);
+    let tasks;
+    if (user?.role === ERoles.AGENT) {
+      tasks = await taskModel.find({ $and: [{ adminId: { $eq: user.associate_admin } }] });
+    } else if (user?.role === ERoles.ADMIN) {
+      tasks = await taskModel.find({ $and: [{ adminId: { $eq: user._id } }] });
+    }
+
+    res.status(200).json({ success: true, message: "Tasks fetched successfully.", tasks });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateTask: RequestHandler = async (req, res, next) => {
+  try {
+    const taskId = req.params.id;
+    const task = await taskModel.findByIdAndUpdate(taskId, { ...req.body });
+    if (!task) return res.status(404).json({ success: true, message: "Task not found." });
+
+    res.status(200).json({ success: true, message: "Task updated successfully." });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteTask: RequestHandler = async (req, res, next) => {
+  try {
+    const taskId = req.params.id;
+    const task = await taskModel.findByIdAndDelete(taskId);
+    if (!task) return res.status(404).json({ success: true, message: "Task not found." });
+
+    res.status(200).json({ success: true, message: "Task deleted successfully." });
   } catch (error) {
     next(error);
   }
