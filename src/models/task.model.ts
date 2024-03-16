@@ -1,9 +1,12 @@
 import { Document, Schema, model } from "mongoose";
 
 interface IBaseTask {
+  adminId: string;
+  assignToId: string;
   taskOwner: string;
   subject: string;
   status: string;
+  isCompleted: boolean;
   isActive: boolean;
   startDate: string;
   dueDate: string;
@@ -11,8 +14,6 @@ interface IBaseTask {
   reminder: string;
   repeat: string;
   discription: string;
-  adminId: string;
-  assignToId: string;
 }
 
 interface ITaskSchema extends IBaseTask, Document {}
@@ -24,6 +25,7 @@ const taskSchema = new Schema<ITaskSchema>(
     taskOwner: { type: String, required: true },
     subject: { type: String, required: true },
     status: { type: String, required: true },
+    isCompleted: { type: Boolean, default: false },
     isActive: { type: Boolean, default: true },
     startDate: { type: String, required: true },
     dueDate: { type: String, required: true },
