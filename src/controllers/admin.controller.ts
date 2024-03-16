@@ -14,6 +14,10 @@ export const getMyProfie: RequestHandler = async (req, res, next) => {
   }
 };
 
+//###########################################################
+/** ---> Agents related controllers */
+//###########################################################
+
 export const addAgent: RequestHandler = async (req, res, next) => {
   try {
     const adminId = res.locals.userId;
@@ -99,6 +103,30 @@ export const getCampaigns: RequestHandler = async (req, res, next) => {
     }
 
     res.status(200).json({ success: true, message: "Campaign fetched successfully.", campaigns });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateCampaign: RequestHandler = async (req, res, next) => {
+  try {
+    const campaignId = req.params.id;
+    const campaign = await campaignModel.findByIdAndUpdate(campaignId, { ...req.body }, { new: true });
+    if (!campaign) return res.status(404).json({ success: false, message: "Campaign not found" });
+
+    res.status(200).json({ success: true, message: "Campaign updated successfully." });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteCampaign: RequestHandler = async (req, res, next) => {
+  try {
+    const campaignId = req.params.id;
+    const campaign = await campaignModel.findByIdAndDelete(campaignId);
+    if (!campaign) return res.status(404).json({ success: false, message: "Campaign not found" });
+
+    res.status(200).json({ success: true, message: "Campaign deleted successfully." });
   } catch (error) {
     next(error);
   }
