@@ -167,8 +167,37 @@ export const getTasks: RequestHandler = async (req, res, next) => {
 
 export const updateTask: RequestHandler = async (req, res, next) => {
   try {
+    const {
+      assignToId,
+      taskOwner,
+      subject,
+      status,
+      isCompleted,
+      isActive,
+      startDate,
+      dueDate,
+      priority,
+      reminder,
+      repeat,
+      discription,
+    } = req.body;
+
+    const body = {
+      assignToId,
+      taskOwner,
+      subject,
+      status,
+      isCompleted,
+      isActive,
+      startDate,
+      dueDate,
+      priority,
+      reminder,
+      repeat,
+      discription,
+    };
     const taskId = req.params.id;
-    const task = await taskModel.findByIdAndUpdate(taskId, { ...req.body });
+    const task = await taskModel.findByIdAndUpdate(taskId, { ...body });
     if (!task) return res.status(404).json({ success: true, message: "Task not found." });
 
     res.status(200).json({ success: true, message: "Task updated successfully." });
