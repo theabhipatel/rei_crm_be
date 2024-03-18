@@ -62,3 +62,68 @@ export const createPlanSchema = object({
     ),
   }),
 });
+
+export const createCampaignSchema = object({
+  body: object({
+    title: string({ required_error: "title is required." }),
+    type: enum_(["Email", "SMS"]),
+    status: string({ required_error: "status is required." }),
+    isCompleted: boolean().optional(),
+    isActive: boolean(),
+    startDate: string({ required_error: "startDate is required." }),
+    endDate: string({ required_error: "endDate is required." }),
+    budgetedCost: number({ required_error: "budgetedCost is required." }),
+    actualCost: number({ required_error: "actualCost is required." }),
+    note: string({ required_error: "note is required." }),
+  }),
+});
+
+export const updateCampaignSchema = object({
+  body: object({
+    title: string().optional(),
+    type: enum_(["Email", "SMS"]).optional(),
+    status: string().optional(),
+    isCompleted: boolean().optional(),
+    isActive: boolean().optional(),
+    startDate: string().optional(),
+    endDate: string().optional(),
+    budgetedCost: number().optional(),
+    actualCost: number().optional(),
+    note: string().optional(),
+    createdby: string().optional(),
+  }),
+});
+
+export const createTaskSchema = object({
+  body: object({
+    assignToId: string({ required_error: "assignToId is required." }),
+    taskOwner: string({ required_error: "taskOwner is required." }),
+    subject: string({ required_error: "subject is required." }),
+    status: string({ required_error: "status is required." }),
+    isCompleted: boolean().optional(),
+    isActive: boolean().optional(),
+    startDate: string({ required_error: "startDate is required." }),
+    dueDate: string({ required_error: "dueDate is required." }),
+    priority: string({ required_error: "priority is required." }),
+    reminder: string({ required_error: "reminder is required." }),
+    repeat: string({ required_error: "repeat is required." }),
+    discription: string({ required_error: "discription is required." }),
+  }),
+});
+
+export const updateTaskSchema = object({
+  body: object({
+    assignToId: string().optional(),
+    taskOwner: string().optional(),
+    subject: string().optional(),
+    status: string().optional(),
+    isCompleted: boolean().optional(),
+    isActive: boolean().optional(),
+    startDate: string().optional(),
+    dueDate: string().optional(),
+    priority: string().optional(),
+    reminder: string().optional(),
+    repeat: string().optional(),
+    discription: string().optional(),
+  }),
+});
