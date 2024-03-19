@@ -1,7 +1,5 @@
-import { response } from "express";
 import fs from "fs";
 import path from "path";
-import { title } from "process";
 
 // Read package.json file
 const packageJson = fs.readFileSync(path.join(__dirname, "../package.json"), "utf8");
