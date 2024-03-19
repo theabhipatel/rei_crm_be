@@ -8,7 +8,7 @@ export const getMyProfile: RequestHandler = async (req, res, next) => {
     const userId = res.locals.userId;
     const user = await userModel.findById(userId).select("-password");
     if (!user) return res.status(404).json({ success: false, message: "User not found." });
-    res.status(200).json({ success: true, message: "User fetched.", user });
+    res.status(200).json({ success: true, message: "Profile fetched successfully.", user });
   } catch (error) {
     next(error);
   }
