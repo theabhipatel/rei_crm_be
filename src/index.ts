@@ -10,8 +10,7 @@ import helmet from "helmet";
 import { rateLimit } from "express-rate-limit";
 import mongoSanitize from "express-mongo-sanitize";
 import swaggerUi from "swagger-ui-express";
-import YMAL from "yaml";
-import fs from "fs";
+import swaggerDocs from "./apiDocsV1";
 
 const app = express();
 
@@ -39,8 +38,7 @@ app.get("/api/v1", (req, res) => {
 app.use("/api/v1", router);
 
 /** ---> documenting api's. */
-const apiDocs = YMAL.parse(fs.readFileSync(__dirname + "/apiDocsV1.yaml", "utf-8"));
-app.use("/api/v1/docs", swaggerUi.serve, swaggerUi.setup(apiDocs));
+app.use("/api/v1/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 /** ---> handling not found page. */
 app.use("*", (req, res) => {
