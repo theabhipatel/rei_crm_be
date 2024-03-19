@@ -1,6 +1,7 @@
 import { response } from "express";
 import fs from "fs";
 import path from "path";
+import { title } from "process";
 
 // Read package.json file
 const packageJson = fs.readFileSync(path.join(__dirname, "../package.json"), "utf8");
@@ -208,6 +209,140 @@ const swaggerDocs = {
       },
     },
 
+    "/super-admin/dashboard/update-admin/{id}": {
+      patch: {
+        tags: ["Super Admin"],
+        summary: "update admin",
+        description: "for update admin directly from the super admin dashboard.",
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            description: "id of admin for update",
+            required: true,
+            schema: {
+              type: "string",
+            },
+          },
+        ],
+        requestBody: {
+          description: "update admin and all the fields  are optional.",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  isBlocked: {
+                    type: "boolean",
+                    example: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          200: {
+            description: "Successful operation",
+          },
+        },
+      },
+    },
+
+    /** ----> Super Admin Plan routes */
+
+    "/super-admin/dashboard/create-plan": {
+      post: {
+        tags: ["Super Admin"],
+        summary: "Create plan",
+        description: "for create plan directly from the super admin dashboard.",
+        requestBody: {
+          description: "create plan and these are field that are required.",
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/createPlanSchema",
+              },
+            },
+          },
+        },
+        responses: {
+          200: {
+            description: "Successful operation",
+          },
+        },
+      },
+    },
+    "/super-admin/dashboard/get-plans": {
+      get: {
+        tags: ["Super Admin"],
+        summary: "Get all plans",
+        description: "for get all plans from the super admin dashboard.",
+        responses: {
+          200: {
+            description: "Successful operation",
+          },
+        },
+      },
+    },
+    "/super-admin/dashboard/update-plan/{id}": {
+      patch: {
+        tags: ["Super Admin"],
+        summary: "Update plan",
+        description: "for update plan directly from the super admin dashboard.",
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            description: "Id for plan to update",
+            required: true,
+          },
+        ],
+        requestBody: {
+          description: "update plan and all the fields are optional.",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  title: {
+                    type: "string",
+                    example: "Updated plan details",
+                  },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          200: {
+            description: "Successful operation",
+          },
+        },
+      },
+    },
+    "/super-admin/dashboard/delete-plan/{id}": {
+      delete: {
+        tags: ["Super Admin"],
+        summary: "Delete plan",
+        description: "for delete plan directly from the super admin dashboard.",
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            description: "Id for plan to delete",
+            required: true,
+          },
+        ],
+
+        responses: {
+          200: {
+            description: "Successful operation",
+          },
+        },
+      },
+    },
+
     //#########################################
     /** ----> Routes for Admin */
     //#########################################
@@ -289,7 +424,6 @@ const swaggerDocs = {
           },
         },
       },
-
       login: {
         type: "object",
         properties: {
@@ -317,6 +451,47 @@ const swaggerDocs = {
           password: {
             type: "string",
             example: "1234",
+          },
+        },
+      },
+      createPlanSchema: {
+        type: "object",
+        properties: {
+          title: {
+            type: "string",
+            example: "Pro",
+          },
+          type: {
+            type: "string",
+            example: "Yearly",
+          },
+          users: {
+            type: "integer",
+            example: 12,
+          },
+          price_permonth: {
+            type: "integer",
+            example: 209,
+          },
+          description: {
+            type: "string",
+            example: "Pro plan for medium teams",
+          },
+          details: {
+            type: "array",
+            items: {
+              type: "object",
+              properties: {
+                title: {
+                  type: "string",
+                  example: "Unlimited Lead Sources",
+                },
+                description: {
+                  type: "string",
+                  example: "Unlock full potential from Unlimited Lead Sources",
+                },
+              },
+            },
           },
         },
       },
