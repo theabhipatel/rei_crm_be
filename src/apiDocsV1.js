@@ -1,11 +1,12 @@
-import fs from 'fs';
-import path from 'path';
+import { response } from "express";
+import fs from "fs";
+import path from "path";
 
 // Read package.json file
-const packageJson = fs.readFileSync(path.join(__dirname, '../package.json'), 'utf8');
+const packageJson = fs.readFileSync(path.join(__dirname, "../package.json"), "utf8");
 const packageData = JSON.parse(packageJson);
 
- const  swaggerDocs = {
+const swaggerDocs = {
   openapi: "3.0.3",
   info: {
     title: "Real Estate Investing(REI) CRM api's docs",
@@ -42,10 +43,10 @@ const packageData = JSON.parse(packageJson);
         summary: "Test server",
         description: "For testing purposes only, to ascertain whether the server is up and running or not.",
         responses: {
-          "200": {
+          200: {
             description: "Successful operation",
           },
-          "500": {
+          500: {
             description: "Something went wrong",
           },
         },
@@ -68,23 +69,23 @@ const packageData = JSON.parse(packageJson);
           required: true,
         },
         responses: {
-          "201": {
+          201: {
             description: "Successful operation",
             content: {
               "application/json": {
                 schema: {
-                  $ref: "#/components/schemas/registerResponse",
+                  $ref: "#/components/responses/registerResponse",
                 },
               },
             },
           },
-          "403": {
+          403: {
             description: "Forbidden",
           },
-          "422": {
+          422: {
             description: "Unprocessable Entity",
           },
-          "500": {
+          500: {
             description: "Something went wrong",
           },
         },
@@ -107,26 +108,26 @@ const packageData = JSON.parse(packageJson);
           required: true,
         },
         responses: {
-          "200": {
+          200: {
             description: "Successful operation",
             content: {
               "application/json": {
                 schema: {
-                  $ref: "#/components/schemas/loginResponse",
+                  $ref: "#/components/responses/loginResponse",
                 },
               },
             },
           },
-          "401": {
+          401: {
             description: "Unauthorized",
           },
-          "403": {
+          403: {
             description: "Forbidden",
           },
-          "422": {
+          422: {
             description: "Unprocessable Entity",
           },
-          "500": {
+          500: {
             description: "Something went wrong",
           },
         },
@@ -138,7 +139,7 @@ const packageData = JSON.parse(packageJson);
         summary: "Get Dashboard profile",
         description: "Get the Dashboard profile for super admin.",
         responses: {
-          "200": {
+          200: {
             description: "Successful operation",
             content: {
               "application/json": {
@@ -148,13 +149,13 @@ const packageData = JSON.parse(packageJson);
               },
             },
           },
-          "401": {
+          401: {
             description: "Unauthorized",
           },
-          "403": {
+          403: {
             description: "Forbidden",
           },
-          "500": {
+          500: {
             description: "Something went wrong",
           },
         },
@@ -163,24 +164,70 @@ const packageData = JSON.parse(packageJson);
     "/super-admin/dashboard/get-admins": {
       get: {
         tags: ["Super Admin"],
+        summary: "Get all admins",
+        description: "for get all admins are there on platform.",
+        responses: {
+          200: {
+            description: "Successful operation",
+          },
+        },
       },
     },
+    "/super-admin/dashboard/get-admins-with-agent": {
+      get: {
+        tags: ["Super Admin"],
+        summary: "Get all admins",
+        description: "for get all admins and their agents both are there on platform.",
+        responses: {
+          200: {
+            description: "Successful operation",
+          },
+        },
+      },
+    },
+    "/super-admin/dashboard/add-admin": {
+      post: {
+        tags: ["Super Admin"],
+        summary: "Add admin directly",
+        description: "for add admin directly from the super admin dashboard.",
+        requestBody: {
+          description: "add admin and these are field that are required.",
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/addAdminSchema",
+              },
+            },
+          },
+        },
+        responses: {
+          200: {
+            description: "Successful operation",
+          },
+        },
+      },
+    },
+
+    //#########################################
+    /** ----> Routes for Admin */
+    //#########################################
+
     "/dashboard/get-me": {
       get: {
         tags: ["Admin"],
         summary: "Get Dashboard profile",
         description: "User can get all its profile related details.",
         responses: {
-          "200": {
+          200: {
             description: "Successful operation",
           },
-          "401": {
+          401: {
             description: "Unauthorized",
           },
-          "404": {
+          404: {
             description: "Not found.",
           },
-          "500": {
+          500: {
             description: "Something went wrong",
           },
         },
@@ -203,19 +250,19 @@ const packageData = JSON.parse(packageJson);
           required: true,
         },
         responses: {
-          "201": {
+          201: {
             description: "Successful operation",
           },
-          "401": {
+          401: {
             description: "Unauthorized",
           },
-          "403": {
+          403: {
             description: "Forbidden",
           },
-          "422": {
+          422: {
             description: "Unprocessable Entity",
           },
-          "500": {
+          500: {
             description: "Something went wrong",
           },
         },
@@ -242,19 +289,7 @@ const packageData = JSON.parse(packageJson);
           },
         },
       },
-      registerResponse: {
-        type: "object",
-        properties: {
-          success: {
-            type: "boolean",
-            example: true,
-          },
-          message: {
-            type: "string",
-            example: "User registered successfully.",
-          },
-        },
-      },
+
       login: {
         type: "object",
         properties: {
@@ -265,6 +300,39 @@ const packageData = JSON.parse(packageJson);
           password: {
             type: "string",
             example: "john1234",
+          },
+        },
+      },
+      addAdminSchema: {
+        type: "object",
+        properties: {
+          fullname: {
+            type: "string",
+            example: "Admin 3",
+          },
+          email: {
+            type: "string",
+            example: "admin3@gmail.com",
+          },
+          password: {
+            type: "string",
+            example: "1234",
+          },
+        },
+      },
+    },
+
+    responses: {
+      registerResponse: {
+        type: "object",
+        properties: {
+          success: {
+            type: "boolean",
+            example: true,
+          },
+          message: {
+            type: "string",
+            example: "User registered successfully.",
           },
         },
       },
@@ -281,8 +349,6 @@ const packageData = JSON.parse(packageJson);
           },
         },
       },
-    },
-    responses: {
       superAdminGetProfileResponse: {
         type: "object",
         properties: {
@@ -321,4 +387,4 @@ const packageData = JSON.parse(packageJson);
   },
 };
 
-module.exports = swaggerDocs
+module.exports = swaggerDocs;
