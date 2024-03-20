@@ -24,7 +24,7 @@ const userSchema = new Schema<IUserSchema>(
     fullname: { type: String, required: true },
     email: { type: String, unique: true, required: true },
     password: { type: String, required: true },
-    role: { type: String, default: ERoles.BUYER },
+    role: { type: String, enum: ERoles, default: ERoles.BUYER },
     associate_admin: { type: String },
     isVerified: { type: Boolean, default: true },
     isBlocked: { type: Boolean, default: false },
