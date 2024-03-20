@@ -374,6 +374,8 @@ const swaggerDocs = {
       },
     },
 
+    /** ----> Agent related routes */
+
     "/admin/dashboard/add-agent": {
       post: {
         tags: ["Admin"],
@@ -405,6 +407,292 @@ const swaggerDocs = {
           },
           500: {
             description: "Something went wrong",
+          },
+        },
+      },
+    },
+    "/admin/dashboard/update-agent/{id}": {
+      patch: {
+        tags: ["Admin"],
+        summary: "Update agent",
+        description: "For update agent by admin dashboard",
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            description: "Id is required for update agent",
+            required: true,
+          },
+        ],
+        requestBody: {
+          description: "All field are optional for upate agent.",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  fullname: {
+                    type: "string",
+                    example: "Agent 1",
+                  },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          201: {
+            description: "Successful operation",
+          },
+        },
+      },
+    },
+    "/admin/dashboard/get-agents": {
+      get: {
+        tags: ["Admin"],
+        summary: "Get All agents",
+        description: "For get all agents in admin and agent dashboard.",
+        responses: {
+          200: {
+            description: "Successful operation",
+          },
+        },
+      },
+    },
+
+    /** ----> Task related routes */
+
+    "/admin/dashboard/get-tasks": {
+      get: {
+        tags: ["Admin"],
+        summary: "Get All tasks",
+        description: "For get all tasks in admin and agent dashboard.",
+        responses: {
+          200: {
+            description: "Successful operation",
+          },
+        },
+      },
+    },
+    "/admin/dashboard/create-task": {
+      post: {
+        tags: ["Admin"],
+        summary: "Create an task from admin dashboard",
+        description: "Admin can create a task by his dashboard.",
+        requestBody: {
+          description: "Required fields for create task.",
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/createTaskSchema",
+              },
+            },
+          },
+          required: true,
+        },
+        responses: {
+          201: {
+            description: "Successful operation",
+          },
+          401: {
+            description: "Unauthorized",
+          },
+          403: {
+            description: "Forbidden",
+          },
+          422: {
+            description: "Unprocessable Entity",
+          },
+          500: {
+            description: "Something went wrong",
+          },
+        },
+      },
+    },
+    "/admin/dashboard/update-task/{id}": {
+      patch: {
+        tags: ["Admin"],
+        summary: "Update an task from admin dashboard",
+        description: "Admin and agent can update a task by his dashboard.",
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            description: "Id is required to update task",
+            required: true,
+          },
+        ],
+        requestBody: {
+          description: "All fields are optional for update task.",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  status: {
+                    type: "string",
+                    example: "completed",
+                  },
+                },
+              },
+            },
+          },
+          required: true,
+        },
+        responses: {
+          200: {
+            description: "Successful operation",
+          },
+          401: {
+            description: "Unauthorized",
+          },
+          403: {
+            description: "Forbidden",
+          },
+          422: {
+            description: "Unprocessable Entity",
+          },
+          500: {
+            description: "Something went wrong",
+          },
+        },
+      },
+    },
+    "/admin/dashboard/delete-task/{id}": {
+      delete: {
+        tags: ["Admin"],
+        summary: "Delete task",
+        description: "Admin can delete task only",
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            description: "Id is required for delete task",
+            required: true,
+          },
+        ],
+        responses: {
+          200: {
+            description: "Successful operation",
+          },
+        },
+      },
+    },
+
+    /** ----> Campaigns related routes */
+
+    "/admin/dashboard/get-campaigns": {
+      get: {
+        tags: ["Admin"],
+        summary: "Get All Campaigns",
+        description: "For get all Campaigns on going in admin and agent dashboard.",
+        responses: {
+          200: {
+            description: "Successful operation",
+          },
+        },
+      },
+    },
+    "/admin/dashboard/create-campaign": {
+      post: {
+        tags: ["Admin"],
+        summary: "Create a campaign from admin and agent dashboard",
+        description: "Admin and agent can create a task by his dashboard.",
+        requestBody: {
+          description: "Required fields for create campaign.",
+          content: {
+            "application/json": {
+              schema: {
+                $ref: "#/components/schemas/createCampaignSchema",
+              },
+            },
+          },
+          required: true,
+        },
+        responses: {
+          201: {
+            description: "Successful operation",
+          },
+          401: {
+            description: "Unauthorized",
+          },
+          403: {
+            description: "Forbidden",
+          },
+          422: {
+            description: "Unprocessable Entity",
+          },
+          500: {
+            description: "Something went wrong",
+          },
+        },
+      },
+    },
+    "/admin/dashboard/update-campaign/{id}": {
+      patch: {
+        tags: ["Admin"],
+        summary: "Update a campaign from admin dashboard",
+        description: "Admin and agent can update a campaign by his dashboard.",
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            description: "Id is required to update campaign",
+            required: true,
+          },
+        ],
+        requestBody: {
+          description: "All fields are optional for update task.",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  status: {
+                    type: "string",
+                    example: "completed",
+                  },
+                },
+              },
+            },
+          },
+          required: true,
+        },
+        responses: {
+          200: {
+            description: "Successful operation",
+          },
+          401: {
+            description: "Unauthorized",
+          },
+          403: {
+            description: "Forbidden",
+          },
+          422: {
+            description: "Unprocessable Entity",
+          },
+          500: {
+            description: "Something went wrong",
+          },
+        },
+      },
+    },
+    "/admin/dashboard/delete-campaign/{id}": {
+      delete: {
+        tags: ["Admin"],
+        summary: "Delete campaign",
+        description: "Admin can delete campaign only",
+        parameters: [
+          {
+            name: "id",
+            in: "path",
+            description: "Id is required for delete campaign",
+            required: true,
+          },
+        ],
+        responses: {
+          200: {
+            description: "Successful operation",
           },
         },
       },
@@ -498,6 +786,103 @@ const swaggerDocs = {
                 },
               },
             },
+          },
+        },
+      },
+      createTaskSchema: {
+        type: "object",
+        properties: {
+          taskOwner: {
+            type: "string",
+            example: "luis locus",
+          },
+          subject: {
+            type: "string",
+            example: "Have to buy street property",
+          },
+          status: {
+            type: "string",
+            example: "pending",
+          },
+          isActive: {
+            type: "boolean",
+            example: true,
+          },
+          startDate: {
+            type: "string",
+            format: "date",
+            example: "12/04/2024",
+          },
+          dueDate: {
+            type: "string",
+            format: "date",
+            example: "15/04/2024",
+          },
+          priority: {
+            type: "string",
+            example: "low",
+          },
+          reminder: {
+            type: "string",
+            format: "date",
+            example: "13/04/2024",
+          },
+          repeat: {
+            type: "string",
+            format: "date",
+            example: "14/04/2024",
+          },
+          discription: {
+            type: "string",
+            example:
+              "You have to collect leads for the properties that we have in our acquisitions for high level streets and you can start over this by today itself.",
+          },
+          assignToId: {
+            type: "string",
+            example: "65eed1acd847a472b5e35b1a",
+          },
+        },
+      },
+      createCampaignSchema: {
+        type: "object",
+        properties: {
+          title: {
+            type: "string",
+            example: "Hot Deal for property 2nd",
+          },
+          type: {
+            type: "string",
+            example: "Email",
+          },
+          status: {
+            type: "string",
+            example: "Running",
+          },
+          isActive: {
+            type: "boolean",
+            example: true,
+          },
+          startDate: {
+            type: "string",
+            format: "date",
+            example: "16/03/2024",
+          },
+          endDate: {
+            type: "string",
+            format: "date",
+            example: "18/03/2024",
+          },
+          budgetedCost: {
+            type: "number",
+            example: 1330,
+          },
+          actualCost: {
+            type: "number",
+            example: 0,
+          },
+          note: {
+            type: "string",
+            example: "this property have to sell within 2 days any how.",
           },
         },
       },
