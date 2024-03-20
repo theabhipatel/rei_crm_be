@@ -345,20 +345,27 @@ const swaggerDocs = {
     /** ----> Routes for Admin */
     //#########################################
 
-    "/dashboard/get-me": {
+    "/admin/dashboard/": {
       get: {
         tags: ["Admin"],
         summary: "Get Dashboard profile",
-        description: "User can get all its profile related details.",
+        description: "Get the Dashboard profile for admin and agents as well.",
         responses: {
           200: {
             description: "Successful operation",
+            content: {
+              "application/json": {
+                schema: {
+                  $ref: "#/components/responses/superAdminGetProfileResponse",
+                },
+              },
+            },
           },
           401: {
             description: "Unauthorized",
           },
-          404: {
-            description: "Not found.",
+          403: {
+            description: "Forbidden",
           },
           500: {
             description: "Something went wrong",
@@ -366,13 +373,14 @@ const swaggerDocs = {
         },
       },
     },
-    "/dashboard/add-agent": {
+
+    "/admin/dashboard/add-agent": {
       post: {
         tags: ["Admin"],
-        summary: "Create an agents",
-        description: "Admin can create an agent.",
+        summary: "Create an agents by admin dashboard",
+        description: "Admin can create an agent by his dashboard.",
         requestBody: {
-          description: "Required fields for login a user.",
+          description: "Required fields for register a agent.",
           content: {
             "application/json": {
               schema: {
@@ -560,4 +568,4 @@ const swaggerDocs = {
   },
 };
 
-module.exports = swaggerDocs;
+export { swaggerDocs };
