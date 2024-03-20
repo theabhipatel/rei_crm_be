@@ -10,7 +10,7 @@ import helmet from "helmet";
 import { rateLimit } from "express-rate-limit";
 import mongoSanitize from "express-mongo-sanitize";
 import swaggerUi from "swagger-ui-express";
-import swaggerDocs from "./apiDocsV1";
+import { swaggerDocs } from "./apiDocsV1";
 
 const app = express();
 
@@ -49,7 +49,8 @@ app.use("*", (req, res) => {
 app.use(errorHandler);
 
 /** ---> listening server and making connection to database. */
-app.listen(Number(PORT), HOST_NAME, () => {
-  console.log(`server is runnig at http://${HOST_NAME}:${PORT}`);
-  connectDb(DB_URL);
+app.listen(Number(PORT), HOST_NAME, async () => {
+  console.log(`[::]  Server is runnig at http://${HOST_NAME}:${PORT}`);
+  await connectDb(DB_URL);
+  console.log(`[::]  Api docs available at http://${HOST_NAME}:${PORT}/api/v1/docs`);
 });
