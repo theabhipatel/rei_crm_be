@@ -226,13 +226,23 @@ export const deleteTask: RequestHandler = async (req, res, next) => {
 export const createCompanyProfile: RequestHandler = async (req, res, next) => {
   try {
     const adminId = res.locals.userId;
-
     await companyProfileModel.create({
       admin: adminId,
       ...req.body,
     });
 
     res.status(201).json({ success: true, message: "Company's profile created successfully." });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getCompanyProfile: RequestHandler = async (req, res, next) => {
+  try {
+    const adminId = res.locals.userId;
+    const profile = await companyProfileModel.findOne({ $and: [{ admin: { $eq: adminId } }] });
+
+    res.status(200).json({ success: true, message: "Company's profile fetched successfully.", profile });
   } catch (error) {
     next(error);
   }
