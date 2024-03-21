@@ -33,7 +33,7 @@ const companyProfileSchema = new Schema<ICompanyProfileSchema>(
     agents: [{ type: String }],
     plan: [
       {
-        planId: { type: String, enum: EPlanType, required: true },
+        planId: { type: String, required: true },
         type: { type: String, enum: EPlanType, required: true },
         purchaseDate: { type: String, required: true },
       },

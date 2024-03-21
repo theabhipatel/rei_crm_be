@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   addAgent,
   createCampaign,
+  createCompanyProfile,
   createTask,
   deleteCampaign,
   deleteTask,
@@ -39,5 +40,8 @@ adminRouter.patch("/update-campaign/:id", validateInput(updateCampaignSchema), u
 adminRouter.patch("/update-task/:id", authorize([ERoles.ADMIN]), validateInput(updateTaskSchema), updateTask);
 adminRouter.delete("/delete-campaign/:id", deleteCampaign);
 adminRouter.delete("/delete-task/:id", authorize([ERoles.ADMIN]), deleteTask);
+
+/** ---> company profile routes. */
+adminRouter.post("/create-company-profile", authorize([ERoles.ADMIN]), createCompanyProfile);
 
 export default adminRouter;
