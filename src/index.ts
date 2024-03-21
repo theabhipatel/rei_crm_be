@@ -27,6 +27,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(mongoSanitize());
 app.use(cors());
 app.use(cookieParser());
+
 app.use(deserializeUser);
 
 /** ---> handling home route. */
