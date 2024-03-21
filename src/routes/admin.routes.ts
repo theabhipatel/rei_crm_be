@@ -8,6 +8,7 @@ import {
   deleteTask,
   getAllAgents,
   getCampaigns,
+  getCompanyProfile,
   getMyProfie,
   getTasks,
   updateAgent,
@@ -43,5 +44,6 @@ adminRouter.delete("/delete-task/:id", authorize([ERoles.ADMIN]), deleteTask);
 
 /** ---> company profile routes. */
 adminRouter.post("/create-company-profile", authorize([ERoles.ADMIN]), createCompanyProfile);
+adminRouter.get("/get-company-profile", authorize([ERoles.ADMIN]), getCompanyProfile);
 
 export default adminRouter;
