@@ -13,6 +13,7 @@ import {
   getTasks,
   updateAgent,
   updateCampaign,
+  updateCompanyProfile,
   updateTask,
 } from "../controllers/admin.controller";
 import { authorize } from "../middlewares/authorize";
@@ -45,5 +46,6 @@ adminRouter.delete("/delete-task/:id", authorize([ERoles.ADMIN]), deleteTask);
 /** ---> company profile routes. */
 adminRouter.post("/create-company-profile", authorize([ERoles.ADMIN]), createCompanyProfile);
 adminRouter.get("/get-company-profile", authorize([ERoles.ADMIN]), getCompanyProfile);
+adminRouter.patch("/update-company-profile/:id", authorize([ERoles.ADMIN]), updateCompanyProfile);
 
 export default adminRouter;

@@ -247,3 +247,17 @@ export const getCompanyProfile: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+
+export const updateCompanyProfile: RequestHandler = async (req, res, next) => {
+  try {
+    const profileId = req.params.id;
+    const { companyName, address, logo } = req.body;
+    const body = { companyName, address, logo };
+    const profile = await companyProfileModel.findByIdAndUpdate(profileId, { ...body });
+    if (!profile) return res.status(404).json({ success: false, message: "Company's profile not found." });
+
+    res.status(200).json({ success: true, message: "Company's profile updated successfully." });
+  } catch (error) {
+    next(error);
+  }
+};

@@ -12,7 +12,7 @@ interface IBaseCompanyProfile {
   address: string;
   logo: string;
   agents: string[];
-  plan: [
+  plans: [
     {
       type: EPlanType;
       purchaseDate: string;
@@ -31,7 +31,7 @@ const companyProfileSchema = new Schema<ICompanyProfileSchema>(
     logo: { type: String },
 
     agents: [{ type: String }],
-    plan: [
+    plans: [
       {
         planId: { type: String, required: true },
         type: { type: String, enum: EPlanType, required: true },
