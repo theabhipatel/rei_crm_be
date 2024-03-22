@@ -14,6 +14,7 @@ interface IBaseUser {
   isVerified: boolean;
   isBlocked: boolean;
   associate_admin: string;
+  companyId: string;
   role: ERoles;
 }
 
@@ -26,6 +27,7 @@ const userSchema = new Schema<IUserSchema>(
     password: { type: String, required: true },
     role: { type: String, enum: ERoles, default: ERoles.BUYER },
     associate_admin: { type: String },
+    companyId: { type: String },
     isVerified: { type: Boolean, default: true },
     isBlocked: { type: Boolean, default: false },
   },
