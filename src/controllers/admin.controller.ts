@@ -24,11 +24,22 @@ export const addAgent: RequestHandler = async (req, res, next) => {
   try {
     const adminId = res.locals.userId;
     const { fullname, email, password } = req.body;
+    const companyProfile = await companyProfileModel.findOne({ $and: [{ admin: { $eq: adminId } }] });
+    if (!companyProfile) return res.status(404).json({ success: false, message: "Company profile not found." });
     const agent = await userModel.findOne({ email });
     if (agent) return res.status(403).json({ success: false, message: "Agent already registered." });
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-    await userModel.create({ fullname, email, password: hashedPassword, associate_admin: adminId, role: ERoles.AGENT });
+    const newAgent = await userModel.create({
+      fullname,
+      email,
+      password: hashedPassword,
+      associate_admin: adminId,
+      role: ERoles.AGENT,
+      companyId: companyProfile._id,
+    });
+
+    await companyProfileModel.findByIdAndUpdate(companyProfile._id, { $push: { agents: newAgent._id } });
 
     res.status(201).json({ success: true, message: "Agent registered successfully." });
   } catch (error) {
@@ -226,6 +237,9 @@ export const deleteTask: RequestHandler = async (req, res, next) => {
 export const createCompanyProfile: RequestHandler = async (req, res, next) => {
   try {
     const adminId = res.locals.userId;
+    const isCompanyProfile = await companyProfileModel.findOne({ $and: [{ admin: { $eq: adminId } }] });
+    if (isCompanyProfile) return res.status(403).json({ success: false, message: "Company's profile alread created." });
+
     await companyProfileModel.create({
       admin: adminId,
       ...req.body,
@@ -241,6 +255,8 @@ export const getCompanyProfile: RequestHandler = async (req, res, next) => {
   try {
     const adminId = res.locals.userId;
     const profile = await companyProfileModel.findOne({ $and: [{ admin: { $eq: adminId } }] });
+
+    if (!profile) return res.status(404).json({ success: false, message: "Company's profile not found." });
 
     res.status(200).json({ success: true, message: "Company's profile fetched successfully.", profile });
   } catch (error) {
