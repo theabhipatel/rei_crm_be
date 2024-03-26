@@ -3,7 +3,7 @@ import userModel, { ERoles } from "../models/user.model";
 import bcrypt from "bcryptjs";
 import campaignModel from "../models/campaign.model";
 import taskModel from "../models/task.model";
-import companyProfileModel from "../models/companyProfile.model";
+import companyProfileModel from "@/models/companyProfile.model";
 
 export const getMyProfie: RequestHandler = async (req, res, next) => {
   try {
