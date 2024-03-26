@@ -7,7 +7,7 @@ import companyProfileModel from "@/models/companyProfile.model";
 
 export const getMyProfie: RequestHandler = async (req, res, next) => {
   try {
-    const userId = res.locals.userId;
+    const userId = req.user.userId;
     const user = await userModel.findById(userId).select("-password");
     if (!user) return res.status(404).json({ success: false, message: "User not found." });
     res.status(200).json({ success: true, message: "User fetched.", user });
@@ -22,7 +22,7 @@ export const getMyProfie: RequestHandler = async (req, res, next) => {
 
 export const addAgent: RequestHandler = async (req, res, next) => {
   try {
-    const adminId = res.locals.userId;
+    const adminId = req.user.userId;
     const { fullname, email, password } = req.body;
     const companyProfile = await companyProfileModel.findOne({ $and: [{ admin: { $eq: adminId } }] });
     if (!companyProfile) return res.status(404).json({ success: false, message: "Company profile not found." });
@@ -49,7 +49,7 @@ export const addAgent: RequestHandler = async (req, res, next) => {
 
 export const getAllAgents: RequestHandler = async (req, res, next) => {
   try {
-    const adminId = res.locals.userId;
+    const adminId = req.user.userId;
     const agents = await userModel
       .find({ $and: [{ associate_admin: { $eq: adminId }, role: { $eq: ERoles.AGENT } }] })
       .select("-password");
@@ -61,7 +61,7 @@ export const getAllAgents: RequestHandler = async (req, res, next) => {
 
 export const updateAgent: RequestHandler = async (req, res, next) => {
   try {
-    const adminId = res.locals.userId;
+    const adminId = req.user.userId;
     const agentId = req.params.id;
 
     const agent = await userModel.findById(agentId);
@@ -90,7 +90,7 @@ export const updateAgent: RequestHandler = async (req, res, next) => {
 
 export const createCampaign: RequestHandler = async (req, res, next) => {
   try {
-    const userId = res.locals.userId;
+    const userId = req.user.userId;
     const user = await userModel.findById(userId);
     if (user?.role === ERoles.AGENT) {
       await campaignModel.create({ createdby: userId, adminId: user.associate_admin, ...req.body });
@@ -106,7 +106,7 @@ export const createCampaign: RequestHandler = async (req, res, next) => {
 
 export const getCampaigns: RequestHandler = async (req, res, next) => {
   try {
-    const userId = res.locals.userId;
+    const userId = req.user.userId;
     const user = await userModel.findById(userId);
     let campaigns;
     if (user?.role === ERoles.AGENT) {
@@ -151,7 +151,7 @@ export const deleteCampaign: RequestHandler = async (req, res, next) => {
 
 export const createTask: RequestHandler = async (req, res, next) => {
   try {
-    const userId = res.locals.userId;
+    const userId = req.user.userId;
     await taskModel.create({ adminId: userId, ...req.body });
 
     res.status(201).json({ success: true, message: "Task created successfully." });
@@ -162,7 +162,7 @@ export const createTask: RequestHandler = async (req, res, next) => {
 
 export const getTasks: RequestHandler = async (req, res, next) => {
   try {
-    const userId = res.locals.userId;
+    const userId = req.user.userId;
     const user = await userModel.findById(userId);
     let tasks;
     if (user?.role === ERoles.AGENT) {
@@ -236,7 +236,7 @@ export const deleteTask: RequestHandler = async (req, res, next) => {
 
 export const createCompanyProfile: RequestHandler = async (req, res, next) => {
   try {
-    const adminId = res.locals.userId;
+    const adminId = req.user.userId;
     const isCompanyProfile = await companyProfileModel.findOne({ $and: [{ admin: { $eq: adminId } }] });
     if (isCompanyProfile) return res.status(403).json({ success: false, message: "Company's profile alread created." });
 
@@ -253,7 +253,7 @@ export const createCompanyProfile: RequestHandler = async (req, res, next) => {
 
 export const getCompanyProfile: RequestHandler = async (req, res, next) => {
   try {
-    const adminId = res.locals.userId;
+    const adminId = req.user.userId;
     const profile = await companyProfileModel.findOne({ $and: [{ admin: { $eq: adminId } }] });
 
     if (!profile) return res.status(404).json({ success: false, message: "Company's profile not found." });
