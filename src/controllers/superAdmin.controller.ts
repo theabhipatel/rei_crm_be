@@ -5,7 +5,7 @@ import planModel from "../models/plan.model";
 
 export const getMyProfile: RequestHandler = async (req, res, next) => {
   try {
-    const userId = res.locals.userId;
+    const userId = req.user.userId;
     const user = await userModel.findById(userId).select("-password");
     if (!user) return res.status(404).json({ success: false, message: "User not found." });
     res.status(200).json({ success: true, message: "Profile fetched successfully.", user });
@@ -86,7 +86,7 @@ export const getAdminsWithAgents: RequestHandler = async (req, res, next) => {
 
 export const createPlan: RequestHandler = async (req, res, next) => {
   try {
-    const userId = res.locals.userId;
+    const userId = req.user.userId;
     const plan = await planModel.create({
       ...req.body,
       createdby: userId,
