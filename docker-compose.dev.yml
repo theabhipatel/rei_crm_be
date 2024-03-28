@@ -4,11 +4,15 @@ services:
   server:
     build:
       context: .
-      target: production
+      target: development
     ports:
       - 3331:3331
     container_name: server-container
+    volumes:
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules
     env_file:
       - .env
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    command: npm run dev
