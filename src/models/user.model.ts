@@ -8,7 +8,8 @@ export enum ERoles {
 }
 
 interface IBaseUser {
-  fullname: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
   isVerified: boolean;
@@ -22,7 +23,8 @@ interface IUserSchema extends IBaseUser, Document {}
 
 const userSchema = new Schema<IUserSchema>(
   {
-    fullname: { type: String, required: true },
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
     email: { type: String, unique: true, required: true },
     password: { type: String, required: true },
     role: { type: String, enum: ERoles, default: ERoles.BUYER },
