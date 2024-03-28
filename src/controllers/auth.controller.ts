@@ -6,12 +6,12 @@ import userModel from "../models/user.model";
 
 export const registerUser: RequestHandler = async (req, res, next) => {
   try {
-    const { fullname, email, password } = req.body;
+    const { firstName, lastName, email, password } = req.body;
     const admin = await userModel.findOne({ email });
     if (admin) return res.status(403).json({ success: false, message: "User already registered." });
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-    await userModel.create({ fullname, email, password: hashedPassword });
+    await userModel.create({ firstName, lastName, email, password: hashedPassword });
 
     res.status(201).json({ success: true, message: "User registered successfully." });
   } catch (error) {

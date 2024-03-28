@@ -2,7 +2,8 @@ import { string, object, boolean, number, enum as enum_, array } from "zod";
 
 export const registerUserSchema = object({
   body: object({
-    fullname: string({ required_error: "fullname is required." }),
+    firstName: string({ required_error: "firstName is required." }),
+    lastName: string({ required_error: "lastName is required." }),
     email: string({ required_error: "email is required." }).email(),
     password: string({ required_error: "password is required." }).min(4, "password must be 4 char long."),
   }),
