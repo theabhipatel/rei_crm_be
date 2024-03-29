@@ -18,7 +18,8 @@ export const loginUserSchema = object({
 
 export const updateAgentSchema = object({
   body: object({
-    fullname: string().optional(),
+    firstName: string().optional(),
+    lastName: string().optional(),
     email: string().email().optional(),
     password: string().min(4, "password must be 4 char long.").optional(),
     isVerified: boolean().optional(),
@@ -39,7 +40,8 @@ export const addAdminSchema = object({
 
 export const updateAdminSchema = object({
   body: object({
-    fullname: string().optional(),
+    firstName: string().optional(),
+    lastName: string().optional(),
     email: string().email().optional(),
     password: string().min(4, "password must be 4 char long.").optional(),
     isVerified: boolean().optional(),
