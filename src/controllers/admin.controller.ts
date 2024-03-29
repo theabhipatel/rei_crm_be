@@ -9,9 +9,9 @@ import userProfileModel from "@/models/userProfile.model";
 export const getMyProfie: RequestHandler = async (req, res, next) => {
   try {
     const userId = req.user.userId;
-    const user = await userModel.findById(userId).select("-password");
-    if (!user) return res.status(404).json({ success: false, message: "User not found." });
-    res.status(200).json({ success: true, message: "User fetched.", user });
+    const profile = await userProfileModel.findOne({ user: userId }).populate({ path: "user", select: "-password" });
+    if (!profile) return res.status(404).json({ success: false, message: "Profile not found." });
+    res.status(200).json({ success: true, message: "Profile fetched successfully.", profile });
   } catch (error) {
     next(error);
   }
