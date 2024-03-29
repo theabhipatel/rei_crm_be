@@ -7,7 +7,7 @@ import userProfileModel from "@/models/userProfile.model";
 export const getMyProfile: RequestHandler = async (req, res, next) => {
   try {
     const userId = req.user.userId;
-    const user = await userModel.findById(userId).select("-password");
+    const user = await userProfileModel.findOne({ userId }).populate({ path: "user", select: "-password" });
     if (!user) return res.status(404).json({ success: false, message: "User not found." });
     res.status(200).json({ success: true, message: "Profile fetched successfully.", user });
   } catch (error) {
@@ -29,7 +29,7 @@ export const addAdmin: RequestHandler = async (req, res, next) => {
       password: hashedPassword,
       role: ERoles.ADMIN,
     });
-    await userProfileModel.create({ firstName, lastName, email, userId: newUser._id, role: ERoles.ADMIN });
+    await userProfileModel.create({ user: newUser._id });
 
     res.status(201).json({ success: true, message: "Admin registered successfully." });
   } catch (error) {
