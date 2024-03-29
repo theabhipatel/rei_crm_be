@@ -52,6 +52,6 @@ app.use(errorHandler);
 /** ---> listening server and making connection to database. */
 app.listen(Number(PORT), HOST_NAME, async () => {
   console.log(`[::]  Server is runnig at http://${HOST_NAME}:${PORT}`);
-  await connectDb(DB_URL);
   console.log(`[::]  Api docs available at http://${HOST_NAME}:${PORT}/api/v1/docs`);
+  connectDb(DB_URL);
 });
