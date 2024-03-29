@@ -25,7 +25,7 @@ const userSchema = new Schema<IUserSchema>(
   {
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
-    email: { type: String, unique: true, required: true },
+    email: { type: String, unique: true, required: true, lowercase: true },
     password: { type: String, required: true },
     role: { type: String, enum: ERoles, default: ERoles.BUYER },
     associate_admin: { type: String },
