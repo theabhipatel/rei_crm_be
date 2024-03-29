@@ -1,4 +1,5 @@
 import { Document, Schema, model } from "mongoose";
+import { ERoles } from "./user.model";
 
 interface IAddress {
   line1: string;
@@ -19,6 +20,7 @@ interface IBaseUserProfile {
   firstName: string;
   lastName: string;
   email: string;
+  role: ERoles;
   adminId: Schema.Types.ObjectId;
   companyId: Schema.Types.ObjectId;
   profilePic: string;
@@ -48,6 +50,7 @@ const userProfileSchema = new Schema<IUserProfileSchema>(
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     email: { type: String, required: true },
+    role: { type: String, enum: ERoles, default: ERoles.BUYER },
     adminId: { type: String },
     companyId: { type: String },
     profilePic: { type: String },
