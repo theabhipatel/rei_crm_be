@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import campaignModel from "../models/campaign.model";
 import taskModel from "../models/task.model";
 import companyProfileModel from "@/models/companyProfile.model";
+import userProfileModel from "@/models/userProfile.model";
 
 export const getMyProfie: RequestHandler = async (req, res, next) => {
   try {
@@ -23,7 +24,7 @@ export const getMyProfie: RequestHandler = async (req, res, next) => {
 export const addAgent: RequestHandler = async (req, res, next) => {
   try {
     const adminId = req.user.userId;
-    const { fullname, email, password } = req.body;
+    const { firstName, lastName, email, password } = req.body;
     const companyProfile = await companyProfileModel.findOne({ $and: [{ admin: { $eq: adminId } }] });
     if (!companyProfile) return res.status(404).json({ success: false, message: "Company profile not found." });
     const agent = await userModel.findOne({ email });
@@ -31,11 +32,21 @@ export const addAgent: RequestHandler = async (req, res, next) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     const newAgent = await userModel.create({
-      fullname,
+      firstName,
+      lastName,
       email,
       password: hashedPassword,
       associate_admin: adminId,
       role: ERoles.AGENT,
+      companyId: companyProfile._id,
+    });
+    await userProfileModel.create({
+      firstName,
+      lastName,
+      email,
+      userId: newAgent._id,
+      role: ERoles.AGENT,
+      adminId,
       companyId: companyProfile._id,
     });
 
@@ -277,3 +288,23 @@ export const updateCompanyProfile: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+
+//###########################################################
+/** ---> Profile related controllers */
+//###########################################################
+
+// export const updateUserProfile: RequestHandler = async (req, res, next) => {
+//   try {
+//     const userId = req.user.userId;
+//     const { firstName, lastName, email, profilePic, address, contact } = req.body;
+
+//     const profile = await userProfileModel.findOne({ $and: [{ userId: { $eq: userId } }] });
+//     if (profile) return res.status(403).json({ success: false, message: "User's profile already created." });
+
+//     await userProfileModel.create({ userId, firstName, lastName, email, profilePic, address, contact });
+
+//     res.status(201).json({ success: true, message: "User's profile created successfully." });
+//   } catch (error) {
+//     next(error);
+//   }
+// };
