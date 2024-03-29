@@ -15,6 +15,24 @@ export const getMyProfile: RequestHandler = async (req, res, next) => {
   }
 };
 
+export const updateMyProfile: RequestHandler = async (req, res, next) => {
+  try {
+    const userId = req.user.userId;
+    const { firstName, lastName, profilePic, address, contact } = req.body;
+
+    if (firstName || lastName) {
+      await userModel.findByIdAndUpdate(userId, { firstName, lastName });
+    }
+    if (profilePic || address || contact) {
+      await userProfileModel.findOneAndUpdate({ user: userId }, { $set: { profilePic, address, contact } });
+    }
+
+    res.status(200).json({ success: true, message: "User's profile updated successfully." });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const addAdmin: RequestHandler = async (req, res, next) => {
   try {
     const { firstName, lastName, email, password } = req.body;

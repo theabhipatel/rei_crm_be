@@ -8,14 +8,16 @@ import {
   getMyProfile,
   getPlans,
   updateAdmin,
+  updateMyProfile,
   updatePlan,
-} from "../controllers/superAdmin.controller";
+} from "@/controllers/superAdmin.controller";
 import { validateInput } from "../middlewares/validateInput";
-import { addAdminSchema, createPlanSchema, updateAdminSchema } from "../validationSchema";
+import { addAdminSchema, createPlanSchema, updateAdminSchema, updateMyProfileSchema } from "../validationSchema";
 
 const superAdminRouter = Router();
 
 superAdminRouter.get("/", getMyProfile);
+superAdminRouter.patch("/update-my-profile", validateInput(updateMyProfileSchema), updateMyProfile);
 superAdminRouter.get("/get-admins", getAllAdmins);
 superAdminRouter.get("/get-admins-with-agent", getAdminsWithAgents);
 superAdminRouter.get("/get-plans", getPlans);
