@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../config";
 import userModel from "../models/user.model";
+import userProfileModel from "@/models/userProfile.model";
 
 export const registerUser: RequestHandler = async (req, res, next) => {
   try {
@@ -11,7 +12,8 @@ export const registerUser: RequestHandler = async (req, res, next) => {
     if (admin) return res.status(403).json({ success: false, message: "User already registered." });
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-    await userModel.create({ firstName, lastName, email, password: hashedPassword });
+    const newUser = await userModel.create({ firstName, lastName, email, password: hashedPassword });
+    await userProfileModel.create({ firstName, lastName, email, userId: newUser._id });
 
     res.status(201).json({ success: true, message: "User registered successfully." });
   } catch (error) {
