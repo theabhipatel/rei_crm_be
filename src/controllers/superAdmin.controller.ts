@@ -2,6 +2,7 @@ import { RequestHandler } from "express";
 import userModel, { ERoles } from "../models/user.model";
 import bcrypt from "bcryptjs";
 import planModel from "../models/plan.model";
+import userProfileModel from "@/models/userProfile.model";
 
 export const getMyProfile: RequestHandler = async (req, res, next) => {
   try {
@@ -16,12 +17,19 @@ export const getMyProfile: RequestHandler = async (req, res, next) => {
 
 export const addAdmin: RequestHandler = async (req, res, next) => {
   try {
-    const { fullname, email, password } = req.body;
+    const { firstName, lastName, email, password } = req.body;
     const user = await userModel.findOne({ email });
     if (user) return res.status(403).json({ success: false, message: "User already registered." });
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-    await userModel.create({ fullname, email, password: hashedPassword, role: ERoles.ADMIN });
+    const newUser = await userModel.create({
+      firstName,
+      lastName,
+      email,
+      password: hashedPassword,
+      role: ERoles.ADMIN,
+    });
+    await userProfileModel.create({ firstName, lastName, email, userId: newUser._id, role: ERoles.ADMIN });
 
     res.status(201).json({ success: true, message: "Admin registered successfully." });
   } catch (error) {
