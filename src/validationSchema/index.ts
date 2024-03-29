@@ -129,3 +129,25 @@ export const updateTaskSchema = object({
     discription: string().optional(),
   }),
 });
+
+export const updateMyProfileSchema = object({
+  body: object({
+    firstName: string().optional(),
+    lastName: string().optional(),
+    profilePic: string().optional(),
+    address: object({
+      line1: string({ required_error: "line1 is required in address." }),
+      line2: string({ required_error: "line2 is required in address." }),
+      city: string({ required_error: "city is required in address." }),
+      state: string({ required_error: "state is required in address." }),
+      pincode: string({ required_error: "pincode is required in address." })
+        .min(6, "pincode should be 6 char long")
+        .max(6, "pincode should be 6 char long"),
+    }).optional(),
+    contact: object({
+      phone: string({ required_error: "phone is required in contact." }),
+      cell: string({ required_error: "cell is required in contact." }),
+      email: string({ required_error: "email is required in contact." }),
+    }).optional(),
+  }),
+});

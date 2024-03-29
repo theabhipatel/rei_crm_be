@@ -14,6 +14,7 @@ import {
   updateAgent,
   updateCampaign,
   updateCompanyProfile,
+  updateMyUserProfile,
   updateTask,
 } from "../controllers/admin.controller";
 import { authorize } from "../middlewares/authorize";
@@ -24,6 +25,7 @@ import {
   registerUserSchema,
   updateAgentSchema,
   updateCampaignSchema,
+  updateMyProfileSchema,
   updateTaskSchema,
 } from "../validationSchema";
 import { ERoles } from "../models/user.model";
@@ -31,6 +33,7 @@ import { ERoles } from "../models/user.model";
 const adminRouter = Router();
 
 adminRouter.get("/", getMyProfie);
+adminRouter.patch("/update-my-profile", validateInput(updateMyProfileSchema), updateMyUserProfile);
 adminRouter.get("/get-agents", getAllAgents);
 adminRouter.get("/get-campaigns", getCampaigns);
 adminRouter.get("/get-tasks", getTasks);

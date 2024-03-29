@@ -289,18 +289,20 @@ export const updateCompanyProfile: RequestHandler = async (req, res, next) => {
 /** ---> Profile related controllers */
 //###########################################################
 
-// export const updateUserProfile: RequestHandler = async (req, res, next) => {
-//   try {
-//     const userId = req.user.userId;
-//     const { firstName, lastName, email, profilePic, address, contact } = req.body;
+export const updateMyUserProfile: RequestHandler = async (req, res, next) => {
+  try {
+    const userId = req.user.userId;
+    const { firstName, lastName, profilePic, address, contact } = req.body;
 
-//     const profile = await userProfileModel.findOne({ $and: [{ userId: { $eq: userId } }] });
-//     if (profile) return res.status(403).json({ success: false, message: "User's profile already created." });
+    if (firstName || lastName) {
+      await userModel.findByIdAndUpdate(userId, { firstName, lastName });
+    }
+    if (profilePic || address || contact) {
+      await userProfileModel.findOneAndUpdate({ user: userId }, { $set: { profilePic, address, contact } });
+    }
 
-//     await userProfileModel.create({ userId, firstName, lastName, email, profilePic, address, contact });
-
-//     res.status(201).json({ success: true, message: "User's profile created successfully." });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
+    res.status(200).json({ success: true, message: "User's profile updated successfully." });
+  } catch (error) {
+    next(error);
+  }
+};
