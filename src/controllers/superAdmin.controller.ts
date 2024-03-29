@@ -91,7 +91,10 @@ export const getAdminsWithAgents: RequestHandler = async (req, res, next) => {
     const agentDocs = await userModel.aggregate([
       { $match: { role: "AGENT" } },
       {
-        $group: { _id: "$associate_admin", agents: { $push: { _id: "$_id", fullname: "$fullname", email: "$email" } } },
+        $group: {
+          _id: "$associate_admin",
+          agents: { $push: { _id: "$_id", firstName: "$firstName", lastName: "$lastName", email: "$email" } },
+        },
       },
     ]);
 
