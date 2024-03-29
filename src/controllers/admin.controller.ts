@@ -41,11 +41,7 @@ export const addAgent: RequestHandler = async (req, res, next) => {
       companyId: companyProfile._id,
     });
     await userProfileModel.create({
-      firstName,
-      lastName,
-      email,
-      userId: newAgent._id,
-      role: ERoles.AGENT,
+      user: newAgent._id,
       adminId,
       companyId: companyProfile._id,
     });

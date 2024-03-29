@@ -13,7 +13,7 @@ export const registerUser: RequestHandler = async (req, res, next) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     const newUser = await userModel.create({ firstName, lastName, email, password: hashedPassword });
-    await userProfileModel.create({ firstName, lastName, email, userId: newUser._id });
+    await userProfileModel.create({ user: newUser._id });
 
     res.status(201).json({ success: true, message: "User registered successfully." });
   } catch (error) {
